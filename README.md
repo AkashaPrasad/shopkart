@@ -19,6 +19,15 @@
 
 ---
 
+## Features
+
+| Storefront | Account | Admin console |
+| --- | --- | --- |
+| Landing page, catalog with search, filters and sort, product pages with reviews and ratings | Email + password and Google sign-in, forgot/reset password | Dashboard with revenue, 14-day sales chart, status counts, low stock |
+| Guest cart with server-side quoting, coupons, free-shipping progress | Address book with PIN code auto-fill and default handling | Orders: filter, search, advance status, cancel, approve or reject returns |
+| Wishlist for guests and members, merged on login | Orders with timeline, retry payment, cancel, return request, reorder, printable invoice | Products: inline stock edits, activate or deactivate |
+| Razorpay (UPI, cards, netbanking, wallets) and cash on delivery | Profile, password change, account deletion | Customers, coupons, reviews, subscribers, contact messages |
+
 ## Overview
 
 ShopKart is a complete e-commerce application built on the MERN stack (MongoDB, Express, React, Node) for small desk and everyday objects at realistic prices. It covers the full purchase journey: a marketing landing page, a filterable catalog, product detail pages, a cart that works for guests and signed-in users, a three-step checkout with address management, Razorpay payments with server-side signature verification, and an account dashboard with order tracking.
@@ -109,7 +118,12 @@ npm install
 npm run dev                   # http://localhost:5173
 ```
 
-Demo credentials after seeding: `test@shopkart.dev` / `Test@12345`.
+Demo accounts after seeding:
+
+| Role | Email | Password |
+| --- | --- | --- |
+| Customer | `test@shopkart.dev` | `Test@12345` |
+| Admin (console at `/admin`) | `test@gmail.com` | `test@123` |
 Coupons: `WELCOME10` (10% off, max ₹100), `FLAT50` (₹50 off over ₹499), `FREESHIP`.
 
 Razorpay test mode accepts card `4111 1111 1111 1111` with any future expiry and CVV, or UPI id `success@razorpay`.
