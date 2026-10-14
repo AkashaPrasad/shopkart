@@ -7,7 +7,8 @@ import { errorMessage } from '@/lib/api'
 import { money } from '@/lib/format'
 import { toLite } from '@/hooks/useProducts'
 import { flyToCart } from '@/components/shared/FlyToCart'
-import { productImage } from '@/components/cart/cartActions'
+import { productImage, useLineActions } from '@/components/cart/cartActions'
+import { TickingQtyStepper } from './TickingQtyStepper'
 import { cn } from '@/lib/utils'
 import type { CartProduct } from '@/types'
 
@@ -37,6 +38,9 @@ function inViewport(el: Element) {
  */
 export function AddToCartButton({ product, qty = 1, color = null, requireColor = false, onMissingColor, variant = 'full', className }: Props) {
   const add = useCart(s => s.add)
+  const line = useCart(s => s.cart.items.find(i => i.product && i.product._id === product._id))
+  const linePending = useCart(s => !!s.pending[product._id])
+  const { changeQty, removeLine } = useLineActions()
   const reduce = useReducedMotion()
   const [phase, setPhase] = useState<'idle' | 'pending' | 'added'>('idle')
   const btn = useRef<HTMLButtonElement>(null)
@@ -71,6 +75,28 @@ export function AddToCartButton({ product, qty = 1, color = null, requireColor =
     transition: { duration: 0.2, ease: EASE },
   }
   const label = soldOut ? `${product.name} is sold out` : undefined
+
+  // Already in the cart → show a − n + control instead of the button (minus at 1 removes the line).
+  if (line && phase === 'idle' && !soldOut) {
+    const max = Math.max(1, Math.min(10, product.stock))
+    const full = variant === 'full'
+    return (
+      <div className={cn('inline-flex items-center gap-2.5', full && 'w-full', className)} data-in-cart>
+        <TickingQtyStepper
+          value={line.qty}
+          min={1}
+          max={max}
+          allowRemove
+          tone={full ? 'accent' : 'default'}
+          size={full ? 'md' : 'sm'}
+          disabled={linePending}
+          onChange={n => (n < 1 ? removeLine(line) : changeQty(line, Math.min(max, n)))}
+          className={cn(full ? 'h-12 flex-1 justify-between px-1' : '', linePending && 'opacity-60')}
+        />
+        {full ? <span className="text-sm text-muted tabular whitespace-nowrap">{line.qty} in cart</span> : null}
+      </div>
+    )
+  }
 
   if (variant === 'compact' || variant === 'block') {
     const block = variant === 'block'

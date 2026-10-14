@@ -57,7 +57,8 @@ export function CartLine({ item, variant = 'page', onNavigate }: { item: CartIte
       value={item.qty}
       max={max}
       disabled={pending || issue?.kind === 'soldout' || issue?.kind === 'unavailable'}
-      onChange={n => changeQty(item, n)}
+      allowRemove
+      onChange={n => (n < 1 ? removeLine(item) : changeQty(item, n))}
       className={cn('transition-opacity', pending && 'opacity-60')}
     />
   )
