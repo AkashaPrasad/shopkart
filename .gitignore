@@ -1,0 +1,27 @@
+# dependencies & builds
+node_modules/
+dist/
+build/
+.vite/
+
+# environment & secrets (never commit)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+infra/outputs.env
+infra/backend.env.production
+infra/*.log
+infra/ls_err
+
+# tooling
+.playwright-mcp/
+.DS_Store
+*.log
+npm-debug.log*
+coverage/
+.idea/
+.vscode/
+infra/cloudflare.env
+!frontend/.env.production
